@@ -1,0 +1,84 @@
+1.00:
+- Initial public release.
+
+0.93:
+- Player interrupts will no longer delay the dialogue menu from showing.
+
+0.92:
+- Call root.XDI_Init() when the dialogue menu is loaded.
+
+0.91:
+- Added Scaleform functions:
+    - SetXDIResult(value:Number)
+
+0.9:
+- Fixed crash when accessing an non-existent INI setting.
+- Player dialogue scene links will now be followed in Ex mode.
+
+0.8:
+- Text replacement will now run on dialogue options.
+- Fixed occasional issue where a running player dialogue action would be reported as not running.
+- Added Papyrus functions:
+    - ResetSaid
+
+0.7:
+- Support for NPC Response scene actions in Ex mode.
+- Support for Info Groups to group responses for NPC Response scene action.
+- Subtitle position is saved and restored on menu open/close.
+- Added Papyrus functions:
+    - GetSceneLink
+    - SetSceneLink
+- Added Scaleform functions:
+    - GetModSetting(setting:String):*
+    - SetMovementEnabled(enabled:Boolean)
+
+0.62:
+- Fixed CTD when trying to retrieve vanilla dialogue options with at least one empty response category.
+- Added Scaleform functions:
+    - SetWheelZoomEnabled
+    - SetFavoritesEnabled
+
+0.61:
+- Added Scaleform functions:
+    - GetSubtitlePosition
+    - SetSubtitlePosition
+
+0.6:
+- Fixed speech check animation not appearing in Ex mode.
+- Framework activation condition changed. (Add XDI keyword to Scene)
+- Added DialogueOption fields:
+    - linkedToSelf
+    - endsScene
+- Added Scaleform functions:
+    - GetINISetting
+
+0.5:
+- Fixed CTD when a NPC has no response topic.
+- Fixed incorrect detection of empty responses when a dialogue subtype is used.
+- Added DialogueOption fields:
+    - challengeLevel
+    - challengeResult
+
+0.4:
+- Framework active condition changed (leave at least one vanilla response category empty)
+- Support for dialogue camera
+- Updated SelectDialogueOption to call internal dialogue handler. (Dialogue camera will now start correctly)
+- Fixed subject and target not being swapped for NPC TopicInfo condition checks
+- Updated DialogueOption object to add "said" field.
+
+0.3:
+- Fixed issue with condition checking for shared TopicInfos.
+- Improved NPC dialogue resolver: one player dialogue topic can now map to multiple NPC responses
+- Added Scaleform functions:
+    - GetTargetName
+
+0.2:
+- Added prompt text.
+- Engine modifications to skip unvoiced player dialogue
+
+0.1:
+- Initial version
+- Added Scaleform functions:
+    - IsFrameworkActive
+    - GetDialogueOptions
+    - SelectDialogueOption
