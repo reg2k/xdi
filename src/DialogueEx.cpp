@@ -17,7 +17,7 @@
 
 namespace DialogueEx {
     //--------------------
-    // Addresses [22]
+    // Addresses [23]
     //--------------------
 
     RVA <uintptr_t> GetInfoForPlayerDialogueOption_HookTarget                   (0x002C5241, "4C 8B C3 41 B9 ? ? ? ? 49 8B D5", 0xF);
