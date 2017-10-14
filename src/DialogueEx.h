@@ -68,8 +68,8 @@ namespace DialogueEx
     //-------------------------
     // Hooks
     //-------------------------
-    TESTopicInfo* GetInfoForPlayerDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, Actor* dialogueTarget, int dialogueOption);
-    TESTopicInfo* GetInfoForNPCDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, Actor* dialogueTarget, int dialogueOption);
+    TESTopicInfo* GetInfoForPlayerDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, TESObjectREFR* dialogueTarget, int dialogueOption);
+    TESTopicInfo* GetInfoForNPCDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, TESObjectREFR* dialogueTarget, int dialogueOption);
     TESTopicInfo* GetNPCResponseInfoForOption_Hook(BGSSceneActionNPCResponseDialogue* npcDialogue, BGSScene* scene);
     bool IsPlayerTalking_Hook(Actor* actor);
 

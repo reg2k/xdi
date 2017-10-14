@@ -43,7 +43,7 @@ typedef void(*_DoTextReplacement)(BSStringEx* str, TESQuest* quest, UInt32 unk3)
 
 typedef bool(*_IKeywordFormBase_HasKeyword)(IKeywordFormBase* keywordFormBase, BGSKeyword* keyword, UInt32 unk3); // unk3 = 0 in HasKeyword condition function
 
-typedef TESTopicInfo* (*_GetInfoForDialogueOption)(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, Actor* dialogueTarget, int dialogueOption);
+typedef TESTopicInfo* (*_GetInfoForDialogueOption)(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, TESObjectREFR* dialogueTarget, int dialogueOption);
 typedef TESTopicInfo* (*_GetNPCResponseInfoForOption)(BGSSceneActionNPCResponseDialogue* npcDialogue, BGSScene* scene);
 typedef bool(*_IsActorTalking)(Actor* actor);   // Actor vtable index 0x4E
 const int _IsActorTalking_VtblIdx = 0x4E;

@@ -274,7 +274,7 @@ namespace DialogueEx {
 
             int dialogueOrder[] = { 3, 0, 1, 2 };   // Question, Positive, Negative, Neutral
             for (int i = 0; i < 4; i++) {
-                TESTopicInfo* info = GetInfoForPlayerDialogueOption_Original(playerDialogue, scene, DYNAMIC_CAST(targetRef, TESObjectREFR, Actor), dialogueOrder[i]);
+                TESTopicInfo* info = GetInfoForPlayerDialogueOption_Original(playerDialogue, scene, targetRef, dialogueOrder[i]);
                 infos.push_back(info);
             }
         }
@@ -473,7 +473,7 @@ namespace DialogueEx {
     //-------------------------
 
     // Player Dialogue Option -> Player TopicInfo (after making selection)
-    TESTopicInfo* GetInfoForPlayerDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, Actor* dialogueTarget, int dialogueOption)
+    TESTopicInfo* GetInfoForPlayerDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, TESObjectREFR* dialogueTarget, int dialogueOption)
     {
         // Use options >5 for custom selections.
         if (playerDialogue->selectedOption >= 5) {
@@ -504,7 +504,7 @@ namespace DialogueEx {
     }
 
     // Player Dialogue Option -> NPC TopicInfo (after making selection)
-    TESTopicInfo* GetInfoForNPCDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, Actor* dialogueTarget, int dialogueOption)
+    TESTopicInfo* GetInfoForNPCDialogueOption_Hook(BGSSceneActionPlayerDialogue* playerDialogue, BGSScene* scene, TESObjectREFR* dialogueTarget, int dialogueOption)
     {
         // Use options >5 for custom selections.
         if (playerDialogue->selectedOption >= 5) {
