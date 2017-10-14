@@ -67,6 +67,9 @@ namespace DialogueEx
     TESTopicInfo* GetNPCInfo(BGSSceneActionPlayerDialogue* playerDialogue, int optionID);
     TESTopicInfo* GetNPCResponseInfo(BGSSceneActionNPCResponseDialogue* npcDialogue, int optionID);
 
+    // Utilities
+    BGSSceneActionNPCResponseDialogue* FindNextNPCResponseAction(BGSScene* scene, int currentPhase);
+
     //-------------------------
     // Hooks
     //-------------------------

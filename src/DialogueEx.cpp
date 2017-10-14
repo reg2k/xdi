@@ -239,8 +239,22 @@ namespace DialogueEx {
                     responseText = str.Get();
                 }
 
-                // Get scene link for response
+                // Get NPC response TopicInfo for dialogue cues.
                 TESTopicInfo* npcResponseInfo = active ? GetNPCInfo(playerDialogue, i) : GetInfoForNPCDialogueOption_Original(playerDialogue, currentScene, *G::player, vanillaDialogueOrder[i]);
+                if (!npcResponseInfo) {
+                    // No NPC response info - look one phase ahead (only) for a NPC Response action.
+                    if (auto npcResponseAction = FindNextNPCResponseAction(currentScene, currentScene->currentPhase)) {
+                        if (active) {
+                            npcResponseInfo = GetNPCResponseInfo(npcResponseAction, i);
+                        } else {
+                            UInt32* playerDialogueOption = Utils::GetOffsetPtr<UInt32>(*G::player, 0xD3C);
+                            *playerDialogueOption = vanillaDialogueOrder[i];
+                            npcResponseInfo = GetNPCResponseInfoForOption_Original(npcResponseAction, currentScene);
+                        }
+                    }
+                }
+
+                // Get scene link for response
                 SceneLink* sceneLink = npcResponseInfo ? GetSceneLink(npcResponseInfo) : nullptr;
 
                 DialogueOption option       = {};
@@ -440,6 +454,22 @@ namespace DialogueEx {
         }
 
         // Nothing was found.
+        return nullptr;
+    }
+
+    // Returns the NPC Response Action in the next phase, if present. Otherwise returns NULL.
+    // TODO: Should check phase conditions.
+    BGSSceneActionNPCResponseDialogue* FindNextNPCResponseAction(BGSScene* scene, int currentPhase) {
+        if (scene) {
+            for (int i = 0; i < scene->actions.count; i++) {
+                BGSSceneAction* action = scene->actions[i];
+                if (action->startPhase == currentPhase + 1) {
+                    if (action->GetType() == BGSSceneAction::kType_NPCResponseDialogue) {
+                        return DYNAMIC_CAST(action, BGSSceneAction, BGSSceneActionNPCResponseDialogue);
+                    }
+                }
+            }
+        }
         return nullptr;
     }
 
