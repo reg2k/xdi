@@ -53,6 +53,9 @@ namespace DialogueEx
 
     TESObjectREFR* GetCurrentPlayerDialogueTarget();
 
+    // Utilities
+    bool IsSceneActionWithinPhase(BGSSceneAction* action, UInt32 phase);
+
     //-------------------------
     // Topic Info
     //-------------------------

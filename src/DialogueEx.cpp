@@ -119,15 +119,24 @@ namespace DialogueEx {
         }
     }
 
+    // Checks to see whether the given scene action is active in the given phase.
+    bool IsSceneActionWithinPhase(BGSSceneAction* action, UInt32 phase) {
+        if (action->startPhase <= phase && action->endPhase >= phase)
+            return true;
+        else
+            return false;
+    }
+
     // Returns the currently executing player dialogue action, or NULL if no player dialogue action is currently active.
     BGSSceneActionPlayerDialogue* GetCurrentPlayerDialogueAction() {
         BGSScene* scene = (*G::player)->GetCurrentScene();
         if (scene) {
             for (int i = 0; i < scene->actions.count; i++) {
                 BGSSceneAction* action = scene->actions[i];
-                if (action->status & BGSSceneAction::kStatus_Running) {
-                    BGSSceneActionPlayerDialogue* playerDialogue = DYNAMIC_CAST(action, BGSSceneAction, BGSSceneActionPlayerDialogue);
-                    if (playerDialogue) return playerDialogue;
+                if (action->GetType() == BGSSceneAction::kType_PlayerDialogue) {
+                    if (action->status & BGSSceneAction::kStatus_Running || IsSceneActionWithinPhase(action, scene->currentPhase)) {
+                        return DYNAMIC_CAST(action, BGSSceneAction, BGSSceneActionPlayerDialogue);
+                    }
                 }
             }
         }
