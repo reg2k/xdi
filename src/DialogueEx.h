@@ -20,6 +20,8 @@ namespace DialogueEx
         int challengeResult;    // -1: Not attempted, 0: Failed, 1: Succeeded. For repeatable challenges, always -1.
         bool linkedToSelf;      // Whether or not this dialogue option links to itself.
         bool endsScene;         // Whether or not this dialogue option will end the scene.
+        bool isBarterOption;    // Whether or not this dialogue option has the VendorInfoScript attached.
+        bool isInventoryOption; // Whether or not this dialogue option has the OpenInventoryInfoScript attached.
     };
 
     //-------------------------

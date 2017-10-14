@@ -4,6 +4,7 @@
 #include "RVA.h"
 #include "Utils.h"
 #include "Globals.h"
+#include "GameUtils.h"
 
 #include "Scaleform.h"
 
@@ -253,6 +254,8 @@ namespace DialogueEx {
                 option.challengeResult      = GetSpeechChallengeState(info);
                 option.linkedToSelf         = sceneLink ? (currentScene == sceneLink->scene && playerDialogue->startPhase >= sceneLink->phase && playerDialogue->endPhase <= sceneLink->phase) : false;
                 option.endsScene            = npcResponseInfo ? (npcResponseInfo->infoFlags & TESTopicInfo::kFlag_EndRunningScene) != 0 : false;
+                option.isBarterOption       = npcResponseInfo ? GameUtils::HasVMScript(npcResponseInfo, "VendorInfoScript") : false;
+                option.isInventoryOption    = npcResponseInfo ? GameUtils::HasVMScript(npcResponseInfo, "OpenInventoryInfoScript") : false;
                 options.push_back(option);
             }
         }

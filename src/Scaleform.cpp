@@ -386,6 +386,8 @@ namespace {
                 dialogueValue.SetMember("challengeResult", &challengeResultValue);
                 dialogueValue.SetMember("linkedToSelf", &linkedToSelfValue);
                 dialogueValue.SetMember("endsScene", &GFxValue(option.endsScene));
+                dialogueValue.SetMember("isBarterOption", &GFxValue(option.isBarterOption));
+                dialogueValue.SetMember("isInventoryOption", &GFxValue(option.isInventoryOption));
                 outValue->PushBack(&dialogueValue);
             }
         } else {
