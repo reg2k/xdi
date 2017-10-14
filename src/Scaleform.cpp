@@ -72,6 +72,19 @@ namespace Scaleform {
         }
     };
 
+    // function GetTargetType():int;
+    // Returns the form type of the target of the current player dialogue action.
+    class GetTargetType : public GFxFunctionHandler {
+    public:
+        virtual void Invoke(Args* args) {
+            if (TESObjectREFR* target = GetCurrentPlayerDialogueTarget()) {
+                args->result->SetInt(target->formType);
+            } else {
+                args->result->SetInt(0);
+            }
+        }
+    };
+
     // function GetINISetting(setting:String):*;
     // Returns the value of the given INI setting.
     class GetINISetting : public GFxFunctionHandler {
@@ -296,6 +309,7 @@ void Scaleform::RegisterFuncs(GFxValue* codeObj, GFxMovieRoot* movieRoot) {
     RegisterFunction<GetDialogueOptions>(codeObj, movieRoot, "GetDialogueOptions");
     RegisterFunction<SelectDialogueOption>(codeObj, movieRoot, "SelectDialogueOption");
     RegisterFunction<GetTargetName>(codeObj, movieRoot, "GetTargetName");
+    RegisterFunction<GetTargetType>(codeObj, movieRoot, "GetTargetType");
 
     RegisterFunction<SetWheelZoomEnabled>(codeObj, movieRoot, "SetWheelZoomEnabled");
     RegisterFunction<SetFavoritesEnabled>(codeObj, movieRoot, "SetFavoritesEnabled");
