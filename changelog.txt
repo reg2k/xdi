@@ -1,3 +1,15 @@
+1.11:
+- Return only NPC response actions that are running on filled quest aliases.
+
+1.10:
+- Updated active player dialogue detection.
+- Support for examining next NPC response action for dialogue cues.
+- Added DialogueOption fields:
+    - isBarterOption:Boolean
+    - isInventoryOption:Boolean
+- Added Scaleform functions:
+    - GetTargetType
+
 1.00:
 - Initial public release.
 

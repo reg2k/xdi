@@ -127,6 +127,20 @@ namespace DialogueEx {
             return false;
     }
 
+    // Returns the reference associated with the action.
+    TESObjectREFR* GetActionRef(BGSScene* scene, BGSSceneAction* action){
+        if (scene) {
+            UInt32          targetHandle = 0;
+            TESObjectREFR*  targetRef    = nullptr;
+            GetQuestAliasHandle(scene->owningQuest, &targetHandle, action->aliasID);
+            if (targetHandle) {
+                LookupREFRByHandle(&targetHandle, &targetRef);
+                return targetRef;
+            }
+        }
+        return nullptr;
+    }
+
     // Returns the currently executing player dialogue action, or NULL if no player dialogue action is currently active.
     BGSSceneActionPlayerDialogue* GetCurrentPlayerDialogueAction() {
         BGSScene* scene = (*G::player)->GetCurrentScene();
@@ -473,7 +487,9 @@ namespace DialogueEx {
             for (int i = 0; i < scene->actions.count; i++) {
                 BGSSceneAction* action = scene->actions[i];
                 if (action->startPhase == currentPhase + 1) {
-                    if (action->GetType() == BGSSceneAction::kType_NPCResponseDialogue) {
+                    // Check that the action is a NPC Response action and that the alias is filled for this action.
+                    // If the alias is not filled, any conditions that check the subject will cause a CTD.
+                    if (action->GetType() == BGSSceneAction::kType_NPCResponseDialogue && GetActionRef(scene, action)) {
                         return DYNAMIC_CAST(action, BGSSceneAction, BGSSceneActionNPCResponseDialogue);
                     }
                 }

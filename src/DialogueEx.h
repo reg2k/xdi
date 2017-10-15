@@ -55,6 +55,7 @@ namespace DialogueEx
 
     // Utilities
     bool IsSceneActionWithinPhase(BGSSceneAction* action, UInt32 phase);
+    TESObjectREFR* GetActionRef(BGSScene* scene, BGSSceneAction* action);
 
     //-------------------------
     // Topic Info
