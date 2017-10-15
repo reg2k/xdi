@@ -15,8 +15,8 @@
 #include "Papyrus.h"
 #include "DialogueEx.h"
 
-//#define DEBUG
-#ifdef DEBUG
+#define DEBUG _DEBUG
+#if DEBUG
 #include "Debug.h"
 #endif
 
@@ -139,7 +139,7 @@ bool F4SEPlugin_Load(const F4SEInterface *f4se)
     // Patch game memory
     DialogueEx::Init();
 
-    #ifdef DEBUG
+    #if DEBUG
         Debug::Init();
     #endif
 
