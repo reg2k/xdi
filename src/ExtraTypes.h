@@ -60,8 +60,8 @@ public:
 
     enum StatusFlags {
         kFlag_Playing   = (1 << 0),
-        kFlag_Paused	= (1 << 2),		// Set this flag to pause the scene. Unset the flag to resume.
-        kFlag_Stopped	= (1 << 20),	// Set this flag to stop the scene immediately.
+        kFlag_Paused    = (1 << 2),     // Set this flag to pause the scene. Unset the flag to resume.
+        kFlag_Stopped   = (1 << 20),    // Set this flag to stop the scene immediately.
     };
 
     enum SceneFlags {
@@ -73,14 +73,14 @@ public:
     IKeywordFormBase keywordFormBase;   // 20
     UInt32      status;                 // 28
     UInt32      unk2C;                  // 2C
-    UnkArray    unk30;                  // 30 - phases?
-    UnkArray    unk48;                  // 48 - when Scene.Stop() is called, all (refs) in this array have their refcounts decremented. perhaps participating actors?
+    UnkArray    unk30;                  // 30 - phases
+    UnkArray    unk48;                  // 48 - when Scene.Stop() is called, all (refs) in this array have their refcounts decremented. perhaps aliases?
     UnkArray    unk60;                  // 60
     UnkArray    unk78;                  // 78
-    tArray<BGSSceneAction*>	actions;    // 90
+    tArray<BGSSceneAction*> actions;    // 90
     TESQuest*   owningQuest;            // A8
-    UInt64      unkB0;                  // B0 - BGSScene*, but for ..? 1402C20D0 recursively visits unkB0 until unkB0 is NULL, then returns sceneFlags >> 5. scene chain - paused scenes? parent? related to unk48
-    UInt32      sceneFlags;             // B8 - (&= 0xFFFFFBFF (unsets bit 10) when player selects a dialogue option.)
+    UInt64      unkB0;                  // B0 - BGSScene*
+    UInt32      sceneFlags;             // B8 - (Bit 10 is unset when player selects a dialogue option.)
     UInt32      unkBC;                  // BC
     UInt64      unkC0;                  // C0
     SInt32      unkC8;                  // C8 - some alias ID
@@ -88,7 +88,7 @@ public:
     SInt32      nextPhase;              // D0
     float       unkD4;                  // D4
     UInt32      unkD8;                  // D8
-    UInt32      unkDC;                  // DC - handle to the next dialogue target for CC
+    UInt32      unkDC;                  // DC - handle of the next dialogue target for CC
     UInt64      unkE0;                  // E0
 
 };
@@ -99,10 +99,10 @@ STATIC_ASSERT(sizeof(BGSScene) == 0xE8);
 class TESTopic : public TESForm
 {
 public:
-	enum { kTypeID = kFormType_DIAL };
+    enum { kTypeID = kFormType_DIAL };
 
     TESFullName     fullName;       // 20
-    UInt32          unk30;          // 30 - unk30 (uint16), unk32
+    UInt32          unk30;          // 30
     UInt32          priority;       // 34
     void*           dialogueBranch; // 38 - TESDialogueBranch
     TESQuest*       owningQuest;    // 40
@@ -122,7 +122,7 @@ STATIC_ASSERT(sizeof(TESTopic) == 0x78);
 class TESTopicInfo : public TESForm
 {
 public:
-	enum { kTypeID = kFormType_INFO };
+    enum { kTypeID = kFormType_INFO };
 
     enum Flags
     {
@@ -136,21 +136,20 @@ public:
         kFlag_SayOnce         = (1 << 2),
         kFlag_RandomEnd       = (1 << 5),
         kFlag_EndRunningScene = (1 << 6),
-
         kFlag_HasBeenSaid     = (1 << 14),
     };
 
-    TESTopic*	                topic;	        // 20
-	TESGlobal*		            resetGlobal;	// 28
-    TESTopicInfo*		        sharedInfo;	    // 30
-    Condition*                  conditions;	    // 38
-    UInt8                       unk40;	        // 40 - info index / possibly dialogue flags (ResetDialogueFlags sets a single byte +0x43 to 0 and MarkUnchanged 0x80000000)
-    UInt8                       unk41;	        // 41
-    UInt8                       unk42;	        // 42 - subtitle priority - Low = 0, Normal = 1, Force = 3
-    bool                        saidOnce;	    // 43 - Said Once flag
-    UInt16		                infoFlags;	    // 44
-    UInt16		                unk46;          // 46 - Hours to reset
-    tList<StringCache::Entry>*  responses;      // 48 - note: responses are always external and stored in externData field. Use Get<char>() to retrieve.
+    TESTopic*                   topic;          // 20
+    TESGlobal*                  resetGlobal;    // 28
+    TESTopicInfo*               sharedInfo;     // 30
+    Condition*                  conditions;     // 38
+    UInt8                       unk40;          // 40 - info index
+    UInt8                       unk41;          // 41
+    UInt8                       unk42;          // 42 - subtitle priority - Low = 0, Normal = 1, Force = 3
+    bool                        saidOnce;       // 43 - Said Once flag
+    UInt16                      infoFlags;      // 44
+    UInt16                      unk46;          // 46 - hours to reset
+    tList<StringCache::Entry>*  responses;      // 48 - responses are always external and stored in externData field. Use Get<char>() to retrieve.
 
 };
 STATIC_ASSERT(offsetof(TESTopicInfo, responses) == 0x48);
@@ -166,27 +165,27 @@ class BGSSceneAction
 public:
     virtual ~BGSSceneAction();
 
-    virtual void	Unk_01();
-    virtual void	Unk_02();
-    virtual void	Unk_03();
-    virtual void	Unk_04();
-    virtual void	Unk_05();
-    virtual void	Unk_06();
-    virtual void	Unk_07();
-    virtual UInt32	GetType();
-    virtual bool	GetIgnoredForCompletion();
-    virtual void	Unk_0A();
-    virtual void	Unk_0B();
-    virtual void	Unk_0C();
-    virtual void	Unk_0D();   // init or reset?
-    virtual void	Unk_0E();
-    virtual void	Unk_0F();
-    virtual void	Unk_10();
-    virtual void	Unk_11();
-    virtual void	Unk_12();   // Execute?
-    virtual void	Unk_13(BGSScene* scene);   // result callback? see timer
-    virtual void	Unk_14();
-    virtual void	Unk_15(BGSScene* scene);   // important function
+    virtual void    Unk_01();
+    virtual void    Unk_02();
+    virtual void    Unk_03();
+    virtual void    Unk_04();
+    virtual void    Unk_05();
+    virtual void    Unk_06();
+    virtual void    Unk_07();
+    virtual UInt32  GetType();
+    virtual bool    GetIgnoredForCompletion();
+    virtual void    Unk_0A();
+    virtual void    Unk_0B();
+    virtual void    Unk_0C();
+    virtual void    Unk_0D();
+    virtual void    Unk_0E();
+    virtual void    Unk_0F();
+    virtual void    Unk_10();
+    virtual void    Unk_11();
+    virtual void    Unk_12();
+    virtual void    Unk_13(BGSScene* scene);
+    virtual void    Unk_14();
+    virtual void    Unk_15(BGSScene* scene);
 
     enum ActionType
     {
@@ -204,6 +203,7 @@ public:
         kFlag_PlayerUseDialogueSubtype_Positive = (1 << 7),
         kFlag_PlayerUseDialogueSubtype_Negative = (1 << 8),
         kFlag_PlayerUseDialogueSubtype_Neutral  = (1 << 9),
+        kFlag_UseDialogueSubtype                = (1 << 10),
         kFlag_PlayerUseDialogueSubtype_Question = (1 << 11),
         kFlag_FaceTarget            = (1 << 15),
         kFlag_HeadTrackPlayer       = (1 << 17),
@@ -218,14 +218,14 @@ public:
         kStatus_Complete
     };
 
-    //	void	** _vtbl;	// 00
+    //void  ** _vtbl;       // 00
     UInt32  aliasID;        // 08 - The target actor that is performing this scene action.
     UInt16  startPhase;     // 0C
     UInt16  endPhase;       // 0E
     UInt32  flags;          // 10
     UInt8   status;         // 14 - 0: stopped, 1: running, 2: complete
     char    pad15[3];       // 15
-    UInt32  index;          // 18 - when comparing, comparand == (id & 0x3FFFFFFF) (shave off top 2 bits) (see IsActionComplete)
+    UInt32  index;          // 18 - (see IsActionComplete)
     UInt32  unk1C;          // 1C
 
 };
@@ -297,13 +297,14 @@ class MenuTopicManager
 public:
     virtual ~MenuTopicManager();
 
-    //void	**  _vtbl;	                    // 00
+    //void      ** _vtbl;                   // 00
     void*       positionPlayerEventSink;    // 08
     UInt32      unk10;                      // 10
     UInt32      dialogueTargetHandle;       // 14
     char        unk18[28];                  // 18
     float       elapsedTime;                // 34 - phase or dialogue
-    UInt32      unk38[4];                   // 38
+    UInt32      unk38;                      // 38
+    NiPoint3    unk3C;                      // 3C - Unk_5E for REFRs subtract player posX/Y/Z from these values.
     UInt8       unk48[8];                   // 48
     bool        unk50;                      // 50 - not in dialogue cam
     bool        unk51;                      // 51
@@ -499,8 +500,8 @@ public:
     }
 
 private:
-    char	* m_data;	// 00
-    UInt16	m_dataLen;	// 08
-    UInt16	m_bufLen;	// 0A
-    UInt32	pad0C;		// 0C
+    char    * m_data;   // 00
+    UInt16  m_dataLen;  // 08
+    UInt16  m_bufLen;   // 0A
+    UInt32  pad0C;      // 0C
 };
