@@ -1,7 +1,8 @@
 #include "DialogueEx.h"
 
 #include "Config.h"
-#include "RVA.h"
+#include "rva/RVA.h"
+
 #include "Utils.h"
 #include "Globals.h"
 #include "GameUtils.h"
@@ -21,33 +22,33 @@ namespace DialogueEx {
     // Addresses [23]
     //--------------------
 
-    RVA <uintptr_t> GetInfoForPlayerDialogueOption_HookTarget                   (0x002C5241, "4C 8B C3 41 B9 ? ? ? ? 49 8B D5", 0xF);
-    RVA <uintptr_t> GetInfoForNPCDialogueOption_HookTarget                      (0x002C55D7, "4C 8B 05 ? ? ? ? 41 B9 ? ? ? ? 49 8B D5", 0x13);
-    RVA <uintptr_t> GetNPCResponseInfoForOption_HookTarget                      (0x002C3408, "49 8B D5 49 8B CF E8 ? ? ? ? 48 85 C0", 0x6, 1, 5);
-    RVA <uintptr_t> IsPlayerTalking_Call                                        (0x00D8F593, "FF 90 70 02 00 00 84 C0 0F 85 ? ? ? ? 48 8B 05 ? ? ? ? 80 78 4E 00");
-    RVA <uintptr_t> DialogueLimiter_Check                                       (0x01269B6E, "0F 83 ? ? ? ? 48 8B 0D ? ? ? ? 48 83 C4 48"); //
-    RVA <uintptr_t> StartPlayerDialogue_Call                                    (0x002C548E, "48 8B C8 C6 44 24 ? ? C6 44 24 ? ? E8 ? ? ? ? 84 C0");
-    RVA <uintptr_t> SwitchToPlayerCC                                            (0x0083CC0A, "C7 87 ? ? ? ? ? ? ? ? 45 84 E4"); // C7 87 D4 01 00 00 01 00 00 00
+    RVA <uintptr_t> GetInfoForPlayerDialogueOption_HookTarget                   ({{RUNTIME_VERSION_1_10_64, 0x002C5241}}, "4C 8B C3 41 B9 ? ? ? ? 49 8B D5", 0xF);
+    RVA <uintptr_t> GetInfoForNPCDialogueOption_HookTarget                      ({{RUNTIME_VERSION_1_10_64, 0x002C55D7}}, "4C 8B 05 ? ? ? ? 41 B9 ? ? ? ? 49 8B D5", 0x13);
+    RVA <uintptr_t> GetNPCResponseInfoForOption_HookTarget                      ({{RUNTIME_VERSION_1_10_64, 0x002C3408}}, "49 8B D5 49 8B CF E8 ? ? ? ? 48 85 C0", 0x6);
+    RVA <uintptr_t> IsPlayerTalking_Call                                        ({{RUNTIME_VERSION_1_10_64, 0x00D913C3}}, "FF 90 70 02 00 00 84 C0 0F 85 ? ? ? ? 48 8B 05 ? ? ? ? 80 78 4E 00");
+    RVA <uintptr_t> DialogueLimiter_Check                                       ({{RUNTIME_VERSION_1_10_64, 0x0126B99E}}, "0F 83 ? ? ? ? 48 8B 0D ? ? ? ? 48 83 C4 48"); //
+    RVA <uintptr_t> StartPlayerDialogue_Call                                    ({{RUNTIME_VERSION_1_10_64, 0x002C548E}}, "48 8B C8 C6 44 24 ? ? C6 44 24 ? ? E8 ? ? ? ? 84 C0");
+    RVA <uintptr_t> SwitchToPlayerCC                                            ({{RUNTIME_VERSION_1_10_64, 0x0083CC1A}}, "C7 87 ? ? ? ? ? ? ? ? 45 84 E4"); // C7 87 D4 01 00 00 01 00 00 00
 
-    RVA <_GetQuestAliasHandle>          GetQuestAliasHandle                     (0x005DCD80, "44 8B 45 18 49 8B 0F", 0xC, 1, 5);
-    RVA <_InitSceneActions>             InitSceneActions_Internal               (0x0058EDA0, "48 8B 5F 38 48 3B F3", 0x14, 1, 5);
-    RVA <_StartScene>                   StartScene_Internal                     (0x0058D8D0, "40 53 48 83 EC 40 81 61 ? ? ? ? ?");
-    RVA <_StartDialogueCamera>          StartDialogueCamera_Internal            (0x00EA10B0, "88 54 24 10 55 56 41 56"); //
-    RVA <_SelectDialogueOption>         SelectDialogueOption_Internal           (0x00EB6CA0, "4C 8B DC 56 48 83 EC 30");
-    RVA <_GetSpeechChallengeLevel>      GetSpeechChallengeLevel                 (0x006218D0, "49 8B CE 48 8B B0 ? ? ? ?", 0xA, 1, 5);
-    RVA <_GetSpeechChallengeState>      GetSpeechChallengeState                 (0x00621B20, "E8 ? ? ? ? 83 F8 FF 74 4C 8B C7", 0, 1, 5);
-    RVA <_GetInfoGroupParent>           GetInfoGroupParent                      (0x00621270, "48 8B CB E8 ? ? ? ? 48 8B F8 48 85 C0 74 28", 0x3, 1, 5);
-    RVA <_PostDialogueHandler>          PostDialogueHandler_Internal            (0x00DA7B40, "40 56 41 57 48 81 EC ? ? ? ? 48 8B F1");
-    RVA <_SetPlayerControlsEnabled>     SetPlayerControls1_Internal             (0x01B1FEE0, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0x15, 1, 5);
-    RVA <_SetPlayerControlsEnabled>     SetPlayerControls2_Internal             (0x01B20000, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0x3C, 1, 5);
-    RVA <_DoTextReplacement>            DoTextReplacement_Internal              (0x00575290, "44 8B 45 50 48 8D 4C 24 ? 48 8B D5", 0xC, 1, 5);
+    RVA <_GetQuestAliasHandle>          GetQuestAliasHandle                     ({{RUNTIME_VERSION_1_10_64, 0x005DCDE0}}, "44 8B 45 18 49 8B 0F", 0xC, 1, 5);
+    RVA <_InitSceneActions>             InitSceneActions_Internal               ({{RUNTIME_VERSION_1_10_64, 0x0058EDC0}}, "48 8B 5F 38 48 3B F3", 0x14, 1, 5);
+    RVA <_StartScene>                   StartScene_Internal                     ({{RUNTIME_VERSION_1_10_64, 0x0058D8F0}}, "40 53 48 83 EC 40 81 61 ? ? ? ? ?");
+    RVA <_StartDialogueCamera>          StartDialogueCamera_Internal            ({{RUNTIME_VERSION_1_10_64, 0x00EA2EE0}}, "88 54 24 10 55 56 41 56"); //
+    RVA <_SelectDialogueOption>         SelectDialogueOption_Internal           ({{RUNTIME_VERSION_1_10_64, 0x00EB8AD0}}, "4C 8B DC 56 48 83 EC 30");
+    RVA <_GetSpeechChallengeLevel>      GetSpeechChallengeLevel                 ({{RUNTIME_VERSION_1_10_64, 0x006218E0}}, "49 8B CE 48 8B B0 ? ? ? ?", 0xA, 1, 5);
+    RVA <_GetSpeechChallengeState>      GetSpeechChallengeState                 ({{RUNTIME_VERSION_1_10_64, 0x00621B30}}, "E8 ? ? ? ? 83 F8 FF 74 4C 8B C7", 0, 1, 5);
+    RVA <_GetInfoGroupParent>           GetInfoGroupParent                      ({{RUNTIME_VERSION_1_10_64, 0x00621280}}, "48 8B CB E8 ? ? ? ? 48 8B F8 48 85 C0 74 28", 0x3, 1, 5);
+    RVA <_PostDialogueHandler>          PostDialogueHandler_Internal            ({{RUNTIME_VERSION_1_10_64, 0x00DA9970}}, "40 56 41 57 48 81 EC ? ? ? ? 48 8B F1");
+    RVA <_SetPlayerControlsEnabled>     SetPlayerControls1_Internal             ({{RUNTIME_VERSION_1_10_64, 0x01B21D20}}, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0x15, 1, 5);
+    RVA <_SetPlayerControlsEnabled>     SetPlayerControls2_Internal             ({{RUNTIME_VERSION_1_10_64, 0x01B21E40}}, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0x3C, 1, 5);
+    RVA <_DoTextReplacement>            DoTextReplacement_Internal              ({{RUNTIME_VERSION_1_10_64, 0x005752B0}}, "44 8B 45 50 48 8D 4C 24 ? 48 8B D5", 0xC, 1, 5);
 
     // Note: the following addresses are offset-adjusted in the Init() method.
-    RVA <tHashSet<SceneLink, TESTopicInfo*>>            g_sceneLinks            (0x03735B20, "48 83 C7 20 85 F6 75 DF", 0x8, 3, 7);
-    RVA <tHashSet<DialoguePrompt, TESTopicInfo*>>       g_dialoguePrompts       (0x03735AC0, "48 83 C6 18 48 83 C7 18", 0xC, 3, 7);
+    RVA <tHashSet<SceneLink, TESTopicInfo*>>            g_sceneLinks            ({{RUNTIME_VERSION_1_10_64, 0x0374FB20}}, "48 83 C7 20 85 F6 75 DF", 0x8, 3, 7);
+    RVA <tHashSet<DialoguePrompt, TESTopicInfo*>>       g_dialoguePrompts       ({{RUNTIME_VERSION_1_10_64, 0x0374FAC0}}, "48 83 C6 18 48 83 C7 18", 0xC, 3, 7);
 
-    RVA <MenuTopicManager*>     g_menuTopicManager                              (0x058ECF30, "48 8B 0D ? ? ? ? 48 83 C4 48", 0, 3, 7);
-    RVA <void*>                 g_inputEnableManager                            (0x058EEB80, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0, 3, 7);
+    RVA <MenuTopicManager*>     g_menuTopicManager                              ({{RUNTIME_VERSION_1_10_64, 0x05907BB0}}, "48 8B 0D ? ? ? ? 48 83 C4 48", 0, 3, 7);
+    RVA <void*>                 g_inputEnableManager                            ({{RUNTIME_VERSION_1_10_64, 0x05909800}}, "48 8B 0D ? ? ? ? 45 33 C9 44 8B C7", 0, 3, 7);
 
     _GetInfoForDialogueOption       GetInfoForPlayerDialogueOption_Original;
     _GetInfoForDialogueOption       GetInfoForNPCDialogueOption_Original;
@@ -623,7 +624,7 @@ namespace DialogueEx {
         if (!resultGlobal) {
             const ModInfo* mod = (*G::dataHandler)->LookupModByName(GAME_PLUGIN_NAME);
             if (mod && mod->modIndex != -1) {
-                UInt32 formID = 0x801 | (mod->modIndex) << 24;
+                UInt32 formID = GAME_RESULT_ID | (mod->modIndex) << 24;
                 TESForm* form = LookupFormByID(formID);
                 if (!form) {
                     _MESSAGE("WARNING: Failed to retrieve XDI_Result from %s.", GAME_PLUGIN_NAME);
@@ -646,8 +647,8 @@ namespace DialogueEx {
 
     void SetInputEnableFlags(int type, UInt32 flags, bool enabled) {
         BSFixedString menuName("DialogueMenu");
-        if ((*G::ui)->IsMenuOpen(&menuName)) {
-            IMenu* menu = (*G::ui)->GetMenu(&menuName);
+        if ((*G::ui)->IsMenuOpen(menuName)) {
+            IMenu* menu = (*G::ui)->GetMenu(menuName);
             UInt32* pInputLayerID = Utils::GetOffset<UInt32*>(menu, 0x158);
             if (type == 1) {
                 SetPlayerControls1_Internal(*g_inputEnableManager, *pInputLayerID, flags, enabled, 2);
@@ -706,7 +707,7 @@ namespace DialogueEx {
         if (!g_activateFrameworkKeyword) {
             const ModInfo* mod = (*G::dataHandler)->LookupModByName(GAME_PLUGIN_NAME);
             if (mod && mod->modIndex != -1) {
-                UInt32 formID = 0x800 | (mod->modIndex) << 24;
+                UInt32 formID = GAME_ACTIVATION_KEYWORD_ID | (mod->modIndex) << 24;
                 g_activateFrameworkKeyword = reinterpret_cast<BGSKeyword*>(LookupFormByID(formID));
                 if (!g_activateFrameworkKeyword) _MESSAGE("WARNING: Failed to retrieve framework activation keyword from %s.", GAME_PLUGIN_NAME);
             } else {

@@ -7,7 +7,7 @@
 #include "f4se/GameRTTI.h"
 
 #include "Config.h"
-#include "RVA.h"
+#include "rva/RVA.h"
 #include "Globals.h"
 
 #include "ExtraTypes.h"

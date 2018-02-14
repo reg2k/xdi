@@ -1,3 +1,19 @@
+1.14:
+- Updated addresses for game version v1.10.64.
+
+1.13:
+- Updated addresses for game version v1.10.50.
+
+1.12:
+- Support for game version v1.10.40.
+- Scaleform functions for MultiActivateMenu:
+    - GetINISetting
+    - GetModSetting
+    - GetSubtitlePosition
+    - SetSubtitlePosition
+- Extracted IsMenuOpen, GetINISetting, GetReferenceName and HasKeyword to GameUtils.cpp.
+- Started on work to make XDI game version independent. (Globals.cpp)
+
 1.11:
 - Return only NPC response actions that are running on filled quest aliases.
 

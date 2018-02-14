@@ -10,9 +10,9 @@
 #include "f4se/GameSettings.h"
 
 #include "Globals.h"
-
 #include "Settings.h"
 #include "DialogueEx.h"
+#include "GameUtils.h"
 
 namespace Scaleform {
     using namespace DialogueEx;
@@ -65,8 +65,7 @@ namespace Scaleform {
         virtual void Invoke(Args* args) {
             const char* result = "";
             if (TESObjectREFR* target = GetCurrentPlayerDialogueTarget()) {
-                // TODO: note this is not version-independent
-                result = CALL_MEMBER_FN(target, GetReferenceName)();
+                result = GameUtils::GetReferenceName(target);
             }
             args->result->SetString(result);
         }
@@ -94,8 +93,7 @@ namespace Scaleform {
             if (args->numArgs < 1) return;
             if (args->args[0].GetType() != GFxValue::kType_String) return;
 
-            // TODO: This is not address-independent.
-            Setting* setting = ::GetINISetting(args->args[0].GetString());
+            Setting* setting = GameUtils::GetINISetting(args->args[0].GetString());
 
             if (setting) {
                 switch (setting->GetType()) {
@@ -154,15 +152,14 @@ namespace Scaleform {
     // function GetSubtitlePosition():Array;
     // Returns: [xPos:Number, yPos:Number]
     // Returns null if the HUDMenu is not open.
-    // TODO: This function is not version-independent. (IsMenuOpen)
     class GetSubtitlePosition_GFX : public GFxFunctionHandler {
     public:
         virtual void Invoke(Args* args) {
             args->result->SetNull();
 
             BSFixedString menuStr("HUDMenu");
-            if ((*G::ui)->IsMenuOpen(&menuStr)) {
-                IMenu* menu = (*G::ui)->GetMenu(&menuStr);
+            if (GameUtils::IsMenuOpen(&menuStr)) {
+                IMenu* menu = (*G::ui)->GetMenu(menuStr);
                 GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
                 movieRoot->CreateArray(args->result);
@@ -188,8 +185,8 @@ namespace Scaleform {
             if (args->args[1].GetType() != GFxValue::kType_Number) return;
 
             BSFixedString menuStr("HUDMenu");
-            if ((*G::ui)->IsMenuOpen(&menuStr)) {
-                IMenu* menu = (*G::ui)->GetMenu(&menuStr);
+            if (GameUtils::IsMenuOpen(&menuStr)) {
+                IMenu* menu = (*G::ui)->GetMenu(menuStr);
                 GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
                 GFxValue subtitle; movieRoot->GetVariable(&subtitle, "root.BottomCenterGroup_mc.SubtitleText_mc");
@@ -273,8 +270,8 @@ namespace Scaleform {
         std::pair<float, float> pos;
 
         BSFixedString menuStr("HUDMenu");
-        if ((*G::ui)->IsMenuOpen(&menuStr)) {
-            IMenu* menu = (*G::ui)->GetMenu(&menuStr);
+        if (GameUtils::IsMenuOpen(&menuStr)) {
+            IMenu* menu = (*G::ui)->GetMenu(menuStr);
             GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
             GFxValue subtitleX; movieRoot->GetVariable(&subtitleX, "root.BottomCenterGroup_mc.SubtitleText_mc.x");
@@ -291,8 +288,8 @@ namespace Scaleform {
 
     bool SetSubtitlePosition(float x, float y) {
         BSFixedString menuStr("HUDMenu");
-        if ((*G::ui)->IsMenuOpen(&menuStr)) {
-            IMenu* menu = (*G::ui)->GetMenu(&menuStr);
+        if (GameUtils::IsMenuOpen(&menuStr)) {
+            IMenu* menu = (*G::ui)->GetMenu(menuStr);
             GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
             GFxValue subtitle; movieRoot->GetVariable(&subtitle, "root.BottomCenterGroup_mc.SubtitleText_mc");
@@ -304,25 +301,34 @@ namespace Scaleform {
     }
 }
 
-void Scaleform::RegisterFuncs(GFxValue* codeObj, GFxMovieRoot* movieRoot) {
-    RegisterFunction<IsFrameworkActive>(codeObj, movieRoot, "IsFrameworkActive");
-    RegisterFunction<GetDialogueOptions>(codeObj, movieRoot, "GetDialogueOptions");
-    RegisterFunction<SelectDialogueOption>(codeObj, movieRoot, "SelectDialogueOption");
-    RegisterFunction<GetTargetName>(codeObj, movieRoot, "GetTargetName");
-    RegisterFunction<GetTargetType>(codeObj, movieRoot, "GetTargetType");
+namespace Scaleform {
+    void RegisterFuncs_MultiActivateMenu(GFxValue* codeObj, GFxMovieRoot* movieRoot) {
+        RegisterFunction<GetINISetting>(codeObj, movieRoot, "GetINISetting");
+        RegisterFunction<GetModSetting>(codeObj, movieRoot, "GetModSetting");
+        RegisterFunction<GetSubtitlePosition_GFX>(codeObj, movieRoot, "GetSubtitlePosition");
+        RegisterFunction<SetSubtitlePosition_GFX>(codeObj, movieRoot, "SetSubtitlePosition");
+    }
 
-    RegisterFunction<SetWheelZoomEnabled>(codeObj, movieRoot, "SetWheelZoomEnabled");
-    RegisterFunction<SetFavoritesEnabled>(codeObj, movieRoot, "SetFavoritesEnabled");
-    RegisterFunction<SetMovementEnabled>(codeObj, movieRoot, "SetMovementEnabled");
-    RegisterFunction<SetPlayerControls>(codeObj, movieRoot, "SetPlayerControls");
+    void RegisterFuncs_DialogueMenu(GFxValue* codeObj, GFxMovieRoot* movieRoot) {
+        RegisterFunction<IsFrameworkActive>(codeObj, movieRoot, "IsFrameworkActive");
+        RegisterFunction<GetDialogueOptions>(codeObj, movieRoot, "GetDialogueOptions");
+        RegisterFunction<SelectDialogueOption>(codeObj, movieRoot, "SelectDialogueOption");
+        RegisterFunction<GetTargetName>(codeObj, movieRoot, "GetTargetName");
+        RegisterFunction<GetTargetType>(codeObj, movieRoot, "GetTargetType");
 
-    RegisterFunction<GetINISetting>(codeObj, movieRoot, "GetINISetting");
-    RegisterFunction<GetModSetting>(codeObj, movieRoot, "GetModSetting");
+        RegisterFunction<SetWheelZoomEnabled>(codeObj, movieRoot, "SetWheelZoomEnabled");
+        RegisterFunction<SetFavoritesEnabled>(codeObj, movieRoot, "SetFavoritesEnabled");
+        RegisterFunction<SetMovementEnabled>(codeObj, movieRoot, "SetMovementEnabled");
+        RegisterFunction<SetPlayerControls>(codeObj, movieRoot, "SetPlayerControls");
 
-    RegisterFunction<GetSubtitlePosition_GFX>(codeObj, movieRoot, "GetSubtitlePosition");
-    RegisterFunction<SetSubtitlePosition_GFX>(codeObj, movieRoot, "SetSubtitlePosition");
+        RegisterFunction<GetINISetting>(codeObj, movieRoot, "GetINISetting");
+        RegisterFunction<GetModSetting>(codeObj, movieRoot, "GetModSetting");
 
-    RegisterFunction<SetXDIResult>(codeObj, movieRoot, "SetXDIResult");
+        RegisterFunction<GetSubtitlePosition_GFX>(codeObj, movieRoot, "GetSubtitlePosition");
+        RegisterFunction<SetSubtitlePosition_GFX>(codeObj, movieRoot, "SetSubtitlePosition");
+
+        RegisterFunction<SetXDIResult>(codeObj, movieRoot, "SetXDIResult");
+    }
 }
 
 bool Scaleform::RegisterScaleform(GFxMovieView * view, GFxValue * f4se_root)
@@ -338,14 +344,18 @@ bool Scaleform::RegisterScaleform(GFxMovieView * view, GFxValue * f4se_root)
         _MESSAGE("WARNING: Scaleform registration failed.");
     }
 
-    // Look for the menu that we want to inject into.
+    // Register native code handlers
     if (strcmp(currentSWFPathString, "Interface/DialogueMenu.swf") == 0) {
-        // Register native code handlers
         GFxValue codeObj;
         movieRoot->GetVariable(&codeObj, "root.Menu_mc.BGSCodeObj");
-        RegisterFuncs(&codeObj, movieRoot);
+        RegisterFuncs_DialogueMenu(&codeObj, movieRoot);
 
         movieRoot->Invoke("root.XDI_Init", nullptr, nullptr, 0);
+
+    } else if (strcmp(currentSWFPathString, "Interface/MultiActivateMenu.swf") == 0) {
+        GFxValue codeObj;
+        movieRoot->GetVariable(&codeObj, "root.Menu_mc.BGSCodeObj");
+        RegisterFuncs_MultiActivateMenu(&codeObj, movieRoot);
     }
 
     return true;
