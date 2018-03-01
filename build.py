@@ -4,7 +4,7 @@ import os, sys
 BUILD_DIR        = 'build'
 PROJECT_DIR      = 'src'
 PLATFORM_TOOLSET = 'v140'
-F4SE_REVISION    = 'tags/v0.6.5'
+F4SE_REVISION    = 'tags/v0.6.6'
 BUILD_TOOLS_REPO = 'https://github.com/reg2k/f4se-build-tools.git'
 
 # Fetch F4SE build tools
