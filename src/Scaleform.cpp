@@ -158,7 +158,7 @@ namespace Scaleform {
             args->result->SetNull();
 
             BSFixedString menuStr("HUDMenu");
-            if (GameUtils::IsMenuOpen(&menuStr)) {
+            if ((*G::ui)->IsMenuOpen(menuStr)) {
                 IMenu* menu = (*G::ui)->GetMenu(menuStr);
                 GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
@@ -185,7 +185,7 @@ namespace Scaleform {
             if (args->args[1].GetType() != GFxValue::kType_Number) return;
 
             BSFixedString menuStr("HUDMenu");
-            if (GameUtils::IsMenuOpen(&menuStr)) {
+            if ((*G::ui)->IsMenuOpen(menuStr)) {
                 IMenu* menu = (*G::ui)->GetMenu(menuStr);
                 GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
@@ -270,7 +270,7 @@ namespace Scaleform {
         std::pair<float, float> pos;
 
         BSFixedString menuStr("HUDMenu");
-        if (GameUtils::IsMenuOpen(&menuStr)) {
+        if ((*G::ui)->IsMenuOpen(menuStr)) {
             IMenu* menu = (*G::ui)->GetMenu(menuStr);
             GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 
@@ -288,7 +288,7 @@ namespace Scaleform {
 
     bool SetSubtitlePosition(float x, float y) {
         BSFixedString menuStr("HUDMenu");
-        if (GameUtils::IsMenuOpen(&menuStr)) {
+        if ((*G::ui)->IsMenuOpen(menuStr)) {
             IMenu* menu = (*G::ui)->GetMenu(menuStr);
             GFxMovieRoot* movieRoot = menu->movie->movieRoot;
 

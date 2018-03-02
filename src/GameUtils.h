@@ -8,7 +8,6 @@ class Setting;
 namespace GameUtils
 {
     bool        HasVMScript(TESForm* form, const char* scriptName);
-    bool        IsMenuOpen(BSFixedString* menuName);
     Setting*    GetINISetting(const char* name);
     const char* GetReferenceName(TESObjectREFR* refr);
     bool HasKeyword(TESForm* form, BGSKeyword* keyword);

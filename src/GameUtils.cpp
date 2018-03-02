@@ -6,17 +6,13 @@
 
 #include "ExtraTypes.h"
 
+#include "f4se/GameReferences.h"
+#include "f4se/GameMenus.h"
 #include "f4se/GameSettings.h"
 #include "f4se/GameRTTI.h"
 #include "f4se/PapyrusVM.h"
 
 namespace GameUtils {
-    //--------------------
-    // Addresses [2]
-    //--------------------
-    RVA <_UI_IsMenuOpen>    UI_IsMenuOpen_Internal      ({{RUNTIME_VERSION_1_10_64, 0x02041F70}}, "E8 ? ? ? ? 84 C0 8B 05 ? ? ? ? 74 62", 0, 1, 5);
-    RVA <_GetReferenceName> GetReferenceName_Internal   ({{RUNTIME_VERSION_1_10_64, 0x0040B5E0}}, "40 53 55 57 41 55 48 81 EC ? ? ? ?");
-
     bool HasVMScript(TESForm* form, const char* scriptName) {
 
         VirtualMachine* vm = (*G::gameVM)->m_virtualMachine;
@@ -38,10 +34,6 @@ namespace GameUtils {
         return false;
     }
 
-    bool IsMenuOpen(BSFixedString* menuName) {
-        return UI_IsMenuOpen_Internal(*G::ui, menuName);
-    }
-
     Setting* GetINISetting(const char* name) {
         Setting* setting = (*G::iniSettings)->Get(name);
         if (!setting)
@@ -51,7 +43,7 @@ namespace GameUtils {
     }
 
     const char* GetReferenceName(TESObjectREFR * refr) {
-        return GetReferenceName_Internal(refr);
+        return CALL_MEMBER_FN(refr, GetReferenceName)();
     }
 
     bool HasKeyword(TESForm* form, BGSKeyword* keyword) {

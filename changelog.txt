@@ -1,3 +1,7 @@
+1.15:
+- Updated addresses for game version v1.10.75.
+- Fixed issue with the in-game mod manager automatically disabling XDI.esm.
+
 1.14:
 - Updated addresses for game version v1.10.64.
 
