@@ -13,5 +13,6 @@ build_script:
   - python build.py
   
 artifacts:
-  - path: build\x64\Release\XDI.dll
-    name: XDI
+  - path: build\x64\Release\*.dll
+    name: DLL only
+  - path: build\*.zip

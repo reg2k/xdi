@@ -1,0 +1,123 @@
+{
+  "minMcmVersion": 4,
+  "modName": "XDI",
+  "displayName": "XDI",
+  "pluginRequirements": ["XDI.esm"],
+  "content": [
+    {
+      "text": "<font size='40'><p align='center'>Extended Dialogue Interface</p></font>",
+      "html": true,
+      "type": "text"
+    },
+    {
+      "type": "spacer",
+	  "numLines":1
+    },
+    {
+      "text": "Dialogue Menu Options",
+      "type": "section"
+    },
+    {
+      "id": "bWrapText:DialogueMenu",
+      "text": "Wrap text",
+      "type": "switcher",
+      "help": "This option controls whether text will wrap to the width of the dialogue menu. If off, text will be autosized to fit the menu.",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    },
+    {
+      "id": "bDimSpokenOptions:DialogueMenu",
+      "text": "Dim spoken options",
+      "type": "switcher",
+      "help": "Controls whether spoken options will be dimmed. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    },
+    {
+      "id": "bEnableOptionHotkeys:DialogueMenu",
+      "text": "Option selection hotkeys",
+      "type": "switcher",
+      "help": "Controls whether the 1-9 keys will activate the associated dialogue option. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    },
+    {
+      "id": "bShowOptionNumbers:DialogueMenu",
+      "text": "Show dialogue option numbers",
+      "type": "switcher",
+      "help": "Controls whether option numbers are displayed. Default: OFF",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    },
+    {
+      "id": "fSubtitlesX:DialogueMenu",
+      "text": "Subtitles X",
+      "type": "textinputFloat",
+      "help": "Controls the position of the subtitles while the dialogue menu is open. Default: 0, 40",
+      "valueOptions": {
+        "sourceType": "ModSettingFloat"
+      }
+    },
+    {
+      "id": "fSubtitlesY:DialogueMenu",
+      "text": "Subtitles Y",
+      "type": "textinputFloat",
+      "help": "Controls the position of the subtitles while the dialogue menu is open. Default: 0, 40",
+      "valueOptions": {
+        "sourceType": "ModSettingFloat"
+      }
+    },
+    { "type": "spacer" },
+    {
+      "text": "Dialogue Cues",
+      "type": "section"
+    },
+    {
+      "id": "bShowIcons:DialogueMenu",
+      "text": "Show dialogue cues",
+      "type": "switcher",
+      "help": "Controls whether dialogue cue icons are enabled. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      },
+      "groupControl": 1
+    },
+    {
+      "id": "bShowQuestionIcon:DialogueMenu",
+      "text": "Mark options that do not continue the conversation",
+      "type": "switcher",
+      "help": "If enabled, a Question icon will be displayed beside options that do not continue the conversation. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      },
+      "groupCondition": 1
+    },
+    { "type": "spacer" },
+    {
+      "text": "Dialogue Menu Display Options",
+      "type": "section"
+    },
+    {
+      "id": "bShowBrackets:DialogueMenu",
+      "text": "Show brackets",
+      "type": "switcher",
+      "help": "Controls whether brackets are displayed in the dialogue menu. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    },
+    {
+      "id": "bShowShadedBackground:DialogueMenu",
+      "text": "Show shaded background",
+      "type": "switcher",
+      "help": "Controls whether a shaded background is used for the dialogue menu. Default: ON",
+      "valueOptions": {
+        "sourceType": "ModSettingBool"
+      }
+    }
+  ]
+}
