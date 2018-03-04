@@ -18,6 +18,10 @@ Call G::Init() in the plugin load routine before calling RVAManager::UpdateAddre
 Doing so ensures that all RelocPtrs have been initialized and can be used to initialize an RVA.
 */
 
+#include "Config.h"
+#include "GameUtils.h"
+
+#include "f4se/GameRTTI.h"
 #include "f4se/GameData.h"
 #include "f4se/GameMenus.h"
 #include "f4se/PapyrusVM.h"
@@ -32,6 +36,9 @@ namespace G
     RVA<PlayerCharacter*>           player;
     RVA<INISettingCollection*>      iniSettings;
     RVA<INIPrefSettingCollection*>  iniPrefSettings;
+
+    std::vector<BGSKeyword*>        activationKeywords;
+    std::vector<TESGlobal*>         resultGlobals;
 
     void Init()
     {
@@ -49,4 +56,57 @@ namespace G
     // mov     rcx, cs:qq_g_player
     // mov     rcx, cs:qq_g_iniSettings
     // mov     rdi, cs:qq_g_iniPrefSettings
+
+    void OnDataLoaded()
+    {
+        activationKeywords.clear();
+        resultGlobals.clear();
+
+        _MESSAGE("Loading plugin data...");
+
+        // XDI Forms
+        RegisterForm(G::activationKeywords, GAME_PLUGIN_NAME, GAME_ACTIVATION_KEYWORD_ID);
+        RegisterForm(G::resultGlobals, GAME_PLUGIN_NAME, GAME_RESULT_ID);
+
+        // Plugin forms
+        char searchString[MAX_PATH] = INI_LOCATION_PLUGINS;
+        strcat_s(searchString, "*.ini");
+        HANDLE hFind; WIN32_FIND_DATA data;
+        hFind = FindFirstFile(searchString, &data);
+        if (hFind != INVALID_HANDLE_VALUE) {
+            do {
+                char iniPath[MAX_PATH] = INI_LOCATION_PLUGINS;
+                strcat_s(iniPath, data.cFileName);
+
+                char sPluginName[MAX_PATH] = "";
+                char sActivationKeyword[MAX_PATH] = "";
+                char sResultGlobal[MAX_PATH] = "";
+                GetPrivateProfileString("XDI", "Plugin", NULL, sPluginName, sizeof(sPluginName), iniPath);
+                GetPrivateProfileString("XDI", "ActivationKeyword", NULL, sActivationKeyword, sizeof(sActivationKeyword), iniPath);
+                GetPrivateProfileString("XDI", "ResultGlobal", NULL, sResultGlobal, sizeof(sResultGlobal), iniPath);
+
+                if (strlen(sPluginName) == 0) continue;
+
+                if (sActivationKeyword) {
+                    UInt32 formID = strtoul(sActivationKeyword, nullptr, 16);
+                    RegisterForm(G::activationKeywords, sPluginName, formID);
+                }
+
+                if (sResultGlobal) {
+                    UInt32 formID = strtoul(sResultGlobal, nullptr, 16);
+                    RegisterForm(G::resultGlobals, sPluginName, formID);
+                }
+
+            } while (FindNextFile(hFind, &data));
+            FindClose(hFind);
+        }
+
+        // Report status
+        if (activationKeywords.size() > 0) {
+            _MESSAGE("Plugin data loaded.");
+        } else {
+            _MESSAGE("FATAL: Failed to load plugin data!");
+        }
+    }
 }
+

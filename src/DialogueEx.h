@@ -34,7 +34,6 @@ namespace DialogueEx
     // Status
     //-------------------------
     bool IsFrameworkActive();
-    BGSKeyword* GetFrameworkActivationKeyword();
     extern bool g_frameworkActiveOverride;  // for debug only. defaults to false.
 
     //-------------------------
@@ -113,7 +112,4 @@ namespace {
         virtual	EventResult	ReceiveEvent(MenuOpenCloseEventEx * evn, void * dispatcher) override;
         static void Register();
     };
-
-    // Utilities
-    TESForm* GetFormFromIdentifier(const std::string & identifier);
 }

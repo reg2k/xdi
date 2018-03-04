@@ -16,3 +16,4 @@ artifacts:
   - path: build\x64\Release\*.dll
     name: DLL only
   - path: build\*.zip
+    name: Packaged

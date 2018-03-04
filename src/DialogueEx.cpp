@@ -619,28 +619,7 @@ namespace DialogueEx {
     //-------------------------
 
     void SetXDIResult(float value) {
-        static TESGlobal* resultGlobal = nullptr;
-
-        if (!resultGlobal) {
-            const ModInfo* mod = (*G::dataHandler)->LookupModByName(GAME_PLUGIN_NAME);
-            if (mod && mod->modIndex != -1) {
-                UInt32 formID = GAME_RESULT_ID | (mod->modIndex) << 24;
-                TESForm* form = LookupFormByID(formID);
-                if (!form) {
-                    _MESSAGE("WARNING: Failed to retrieve XDI_Result from %s.", GAME_PLUGIN_NAME);
-                    return;
-                }
-                if (form->formType != TESGlobal::kTypeID) {
-                    _MESSAGE("WARNING: Form type mismatch.", GAME_PLUGIN_NAME);
-                    return;
-                }
-                resultGlobal = reinterpret_cast<TESGlobal*>(form);
-            } else {
-                _MESSAGE("WARNING: %s is not loaded.", GAME_PLUGIN_NAME);
-            }
-        }
-
-        if (resultGlobal) {
+        for (TESGlobal* resultGlobal : G::resultGlobals) {
             resultGlobal->value = value;
         }
     }
@@ -685,38 +664,17 @@ namespace DialogueEx {
         if (auto playerDialogue = GetCurrentPlayerDialogueAction()) {
             if (g_frameworkActiveOverride) return true;
 
-            // If the scene has the framework activation keyword then return true.
-            if (BGSKeyword* activationKeyword = GetFrameworkActivationKeyword()) {
-                BGSScene* currentScene = (*G::player)->GetCurrentScene();
-                IKeywordFormBase* keywordFormBase = DYNAMIC_CAST(currentScene, BGSScene, IKeywordFormBase);
-
-                if (keywordFormBase) {
-                    auto HasKeyword_Internal = Utils::GetVirtualFunction<_IKeywordFormBase_HasKeyword>(keywordFormBase, 1);
-                    if (HasKeyword_Internal(keywordFormBase, activationKeyword, 0)) {
-                        return true;
-                    }
+            BGSScene* currentScene = (*G::player)->GetCurrentScene();
+            IKeywordFormBase* keywordFormBase = DYNAMIC_CAST(currentScene, BGSScene, IKeywordFormBase);
+            if (keywordFormBase) {
+                auto HasKeyword_Internal = Utils::GetVirtualFunction<_IKeywordFormBase_HasKeyword>(keywordFormBase, 1);
+                for (BGSKeyword* activationKeyword : G::activationKeywords) {
+                    if (HasKeyword_Internal(keywordFormBase, activationKeyword, 0)) return true;
                 }
             }
         }
         return false;
     }
-
-    BGSKeyword* GetFrameworkActivationKeyword()
-    {
-        static BGSKeyword* g_activateFrameworkKeyword = nullptr;
-        if (!g_activateFrameworkKeyword) {
-            const ModInfo* mod = (*G::dataHandler)->LookupModByName(GAME_PLUGIN_NAME);
-            if (mod && mod->modIndex != -1) {
-                UInt32 formID = GAME_ACTIVATION_KEYWORD_ID | (mod->modIndex) << 24;
-                g_activateFrameworkKeyword = reinterpret_cast<BGSKeyword*>(LookupFormByID(formID));
-                if (!g_activateFrameworkKeyword) _MESSAGE("WARNING: Failed to retrieve framework activation keyword from %s.", GAME_PLUGIN_NAME);
-            } else {
-                _MESSAGE("WARNING: %s is not loaded.", GAME_PLUGIN_NAME);
-            }
-        }
-        return g_activateFrameworkKeyword;
-    }
-
 }
 
 //-----------------------
@@ -745,31 +703,5 @@ namespace {
         static MenuOpenCloseHandler eventSink;
         BSTEventDispatcher<MenuOpenCloseEventEx>* eventDispatcher = Utils::GetOffsetPtr<BSTEventDispatcher<MenuOpenCloseEventEx>>(*G::ui, 0x18);
         eventDispatcher->AddEventSink(&eventSink);
-    }
-
-    // Utilities
-    TESForm * GetFormFromIdentifier(const std::string & identifier)
-    {
-        auto delimiter = identifier.find('|');
-        if (delimiter != std::string::npos) {
-            std::string modName = identifier.substr(0, delimiter);
-            std::string modForm = identifier.substr(delimiter + 1);
-
-            const ModInfo* mod = (*G::dataHandler)->LookupModByName(modName.c_str());
-            if (mod && mod->modIndex != -1) {
-                UInt32 formID = strtoul(modForm.c_str(), nullptr, 16) & 0xFFFFFF;
-                UInt32 flags = Utils::GetOffset<UInt32>(mod, 0x334);
-                if (flags & (1 << 9)) {
-                    // ESL
-                    formID &= 0xFFF;
-                    formID |= 0xFE << 24;
-                    formID |= Utils::GetOffset<UInt16>(mod, 0x372) << 12;	// ESL load order
-                } else {
-                    formID |= (mod->modIndex) << 24;
-                }
-                return LookupFormByID(formID);
-            }
-        }
-        return nullptr;
     }
 }

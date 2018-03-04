@@ -6,6 +6,7 @@
 
 #include "ExtraTypes.h"
 
+#include "f4se/GameData.h"
 #include "f4se/GameReferences.h"
 #include "f4se/GameMenus.h"
 #include "f4se/GameSettings.h"
@@ -55,5 +56,46 @@ namespace GameUtils {
             }
         }
         return false;
+    }
+
+    TESForm * GetFormFromIdentifier(const std::string & identifier) {
+        auto delimiter = identifier.find('|');
+        if (delimiter != std::string::npos) {
+            std::string modName = identifier.substr(0, delimiter);
+            std::string modForm = identifier.substr(delimiter + 1);
+
+            const ModInfo* mod = (*G::dataHandler)->LookupModByName(modName.c_str());
+            if (mod && mod->modIndex != 0xFF) {
+                UInt32 formID = strtoul(modForm.c_str(), nullptr, 16) & 0xFFFFFF;
+                UInt32 flags = Utils::GetOffset<UInt32>(mod, 0x334);
+                if (flags & (1 << 9)) {
+                    // ESL
+                    formID &= 0xFFF;
+                    formID |= 0xFE << 24;
+                    formID |= Utils::GetOffset<UInt16>(mod, 0x372) << 12;	// ESL load order
+                } else {
+                    formID |= (mod->modIndex) << 24;
+                }
+                return LookupFormByID(formID);
+            }
+        }
+        return nullptr;
+    }
+
+    TESForm* GetFormFromFile(const char* pluginName, UInt32 formID) {
+        const ModInfo* mod = (*G::dataHandler)->LookupModByName(pluginName);
+        if (mod && mod->modIndex != 0xFF) {
+            UInt32 flags = Utils::GetOffset<UInt32>(mod, 0x334);
+            if (flags & (1 << 9)) {
+                // ESL
+                formID &= 0xFFF;
+                formID |= 0xFE << 24;
+                formID |= Utils::GetOffset<UInt16>(mod, 0x372) << 12;	// ESL load order
+            } else {
+                formID |= (mod->modIndex) << 24;
+            }
+            return LookupFormByID(formID);
+        }
+        return nullptr;
     }
 }

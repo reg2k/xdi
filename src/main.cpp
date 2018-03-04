@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "rva/RVA.h"
 #include "Globals.h"
+#include "GameUtils.h"
 
 #include "ExtraTypes.h"
 #include "Scaleform.h"
@@ -33,6 +34,9 @@ F4SEMessagingInterface *g_messaging = NULL;
 
 void OnF4SEMessage(F4SEMessagingInterface::Message* msg) {
     switch (msg->type) {
+        case F4SEMessagingInterface::kMessage_GameDataReady:
+            G::OnDataLoaded();
+            break;
         case F4SEMessagingInterface::kMessage_GameLoaded:
             DialogueEx::OnGameLoaded();
             break;

@@ -4,8 +4,8 @@
 //-----------------------
 // Plugin Information
 //-----------------------
-#define PLUGIN_VERSION              8
-#define PLUGIN_VERSION_STRING       "1.15"
+#define PLUGIN_VERSION              9
+#define PLUGIN_VERSION_STRING       "1.2.0"
 #define PLUGIN_NAME_SHORT           "XDI"
 #define PLUGIN_NAME_LONG            "Extended Dialogue Interface"
 #define SUPPORTED_RUNTIME_VERSION   CURRENT_RELEASE_RUNTIME
@@ -18,6 +18,7 @@
 
 #define INI_LOCATION_DEFAULTS       "./Data/MCM/Config/XDI/settings.ini"
 #define INI_LOCATION_USER           "./Data/MCM/Settings/XDI.ini"
+#define INI_LOCATION_PLUGINS        "Data/XDI/"
 
 //-------------
 // Addresses
