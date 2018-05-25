@@ -4,8 +4,8 @@
 //-----------------------
 // Plugin Information
 //-----------------------
-#define PLUGIN_VERSION              10
-#define PLUGIN_VERSION_STRING       "1.2.1"
+#define PLUGIN_VERSION              11
+#define PLUGIN_VERSION_STRING       "1.2.2"
 #define PLUGIN_NAME_SHORT           "XDI"
 #define PLUGIN_NAME_LONG            "Extended Dialogue Interface"
 #define SUPPORTED_RUNTIME_VERSION   CURRENT_RELEASE_RUNTIME
