@@ -249,6 +249,13 @@ namespace DialogueEx {
                     info = info->sharedInfo;
                 }
 
+                if (active) {
+                    // Skip Say Once infos that have already been said
+                    if ((info->infoFlags & TESTopicInfo::kFlag_SayOnce) && 
+                        (info->infoFlags & TESTopicInfo::kFlag_HasBeenSaid))
+                        continue;
+                }
+
                 int vanillaDialogueOrder[] = { 3, 0, 1, 2 };   // Question, Positive, Negative, Neutral
                 
                 // Get prompt
@@ -408,13 +415,13 @@ namespace DialogueEx {
 
     // Returns the first NPC response info that passes its condition check.
     // Todo: Handle Random and Random End flagged infos.
-    // Say once infos?
     TESTopicInfo* GetNPCInfo(BGSSceneActionPlayerDialogue* playerDialogue, int optionID)
     {
         BuildDialogueMap();
         auto npcInfos = g_dialogueHolder.dialogueMap[optionID].second;
         for (TESTopicInfo* info : npcInfos) {
             if (info->flags & TESForm::kFlag_IsDeleted) continue;
+            if ((info->infoFlags & TESTopicInfo::kFlag_SayOnce) && (info->infoFlags & TESTopicInfo::kFlag_HasBeenSaid)) continue;
             if (EvaluateInfoConditions(info, playerDialogue, true)) {
                 return info;
             }
@@ -541,7 +548,10 @@ namespace DialogueEx {
 
             if (info) {
                 SetPlayerDialogue(false);   // Disable player dialogue
-                info->infoFlags |= TESTopicInfo::kFlag_HasBeenSaid;   // Mark the info as 'said'.
+
+                // Mark info as 'said'.
+                info->MarkChanged(1 << 30);
+                info->infoFlags |= TESTopicInfo::kFlag_HasBeenSaid;
 
                 SceneLink* sceneLink = GetSceneLink(info);
                 if (sceneLink) {
