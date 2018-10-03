@@ -1,3 +1,6 @@
+1.3.0:
+- Implemented Say Once functionality for player and NPC dialogue.
+
 1.2.0:
 - Plugins can now specify their own XDI activation keyword.
 
