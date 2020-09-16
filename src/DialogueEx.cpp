@@ -414,14 +414,36 @@ namespace DialogueEx {
     }
 
     // Returns the first NPC response info that passes its condition check.
-    // Todo: Handle Random and Random End flagged infos.
+    // Todo: Handle Random End flagged infos.
     TESTopicInfo* GetNPCInfo(BGSSceneActionPlayerDialogue* playerDialogue, int optionID)
     {
         BuildDialogueMap();
         auto npcInfos = g_dialogueHolder.dialogueMap[optionID].second;
+
+        int randomChosen;
+        bool randomRun = false;
+        int currentRandom = 0;
+
         for (TESTopicInfo* info : npcInfos) {
             if (info->flags & TESForm::kFlag_IsDeleted) continue;
             if ((info->infoFlags & TESTopicInfo::kFlag_SayOnce) && (info->infoFlags & TESTopicInfo::kFlag_HasBeenSaid)) continue;
+
+            if (info->infoFlags & TESTopicInfo::kFlag_Random) {
+                if (!randomRun) {
+                    randomChosen = rand() % npcInfos.size();
+                    randomRun = true;
+                }
+
+                if (currentRandom == randomChosen) {
+                    if (EvaluateInfoConditions(info, playerDialogue, true)) {
+                        return info;
+                    }
+                } else {
+                    currentRandom++;
+                    continue;
+                }
+            }
+
             if (EvaluateInfoConditions(info, playerDialogue, true)) {
                 return info;
             }
